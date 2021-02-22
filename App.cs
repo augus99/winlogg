@@ -26,7 +26,8 @@ namespace Winlogg {
             KbdHook = new KeyboardHook(KeyboardHookHandler);
             ExportDialog = new SaveFileDialog();
             NotifyIcon.Icon = new System.Drawing.Icon(SystemIcons.Exclamation, 30, 30);
-            
+
+            ContextMenuStrip.Items.Add("Unhook", default, ToggleHookClickHandler);
             ContextMenuStrip.Items.Add("Exit", default, ButtonExitClickHandler);
             
             KbdHook.Hook();
@@ -43,6 +44,18 @@ namespace Winlogg {
                 else if(pressed == KEY_SPACE) Log.Append(" ");
                 else if(pressed == KEY_BACKSPACE && Log.Length > 0 && Log[Log.Length - 1]!= '\n') Log.Remove(Log.Length - 1, 1);
             }
+        }
+
+        private void ToggleHookClickHandler(object sender, EventArgs args) {
+            if(Running) {
+                KbdHook.Unhook();
+                ContextMenuStrip.Items[0].Text = "Hook";
+            } else {
+                KbdHook.Hook();
+                ContextMenuStrip.Items[0].Text = "Unhook";
+            }
+
+            Running = !Running;
         }
 
         private void ButtonExitClickHandler(object sender, EventArgs args) {
