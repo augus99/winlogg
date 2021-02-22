@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using Winhooks;
@@ -28,8 +29,13 @@ namespace Winlogg {
             NotifyIcon.Icon = new System.Drawing.Icon(SystemIcons.Exclamation, 30, 30);
 
             ContextMenuStrip.Items.Add("Unhook", default, ToggleHookClickHandler);
+            ContextMenuStrip.Items.Add("Export log", default, ButtonExportClickHandler);
             ContextMenuStrip.Items.Add("Exit", default, ButtonExitClickHandler);
             
+            ExportDialog.Filter = "Text files (*.txt)|*.txt|Log files (*.log)|*.log";
+            ExportDialog.Title = "Export log";
+            ExportDialog.FileName = "keylog.txt";
+
             KbdHook.Hook();
             Running = true;
         }
@@ -44,6 +50,20 @@ namespace Winlogg {
                 else if(pressed == KEY_SPACE) Log.Append(" ");
                 else if(pressed == KEY_BACKSPACE && Log.Length > 0 && Log[Log.Length - 1]!= '\n') Log.Remove(Log.Length - 1, 1);
             }
+        }
+
+        private void ButtonExportClickHandler(object sender, EventArgs args) {
+            SkipKeyStrokes = true;
+
+            if (ExportDialog.ShowDialog() == DialogResult.OK) {
+                string path = ExportDialog.FileName;
+                string content = Log.ToString();
+
+                File.WriteAllText(path, content);
+            }
+
+            ExportDialog.FileName = "keylog.txt";
+            SkipKeyStrokes = false;
         }
 
         private void ToggleHookClickHandler(object sender, EventArgs args) {
