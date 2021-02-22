@@ -30,6 +30,7 @@ namespace Winlogg {
 
             ContextMenuStrip.Items.Add("Unhook", default, ToggleHookClickHandler);
             ContextMenuStrip.Items.Add("Export log", default, ButtonExportClickHandler);
+            ContextMenuStrip.Items.Add("-");
             ContextMenuStrip.Items.Add("Exit", default, ButtonExitClickHandler);
             
             ExportDialog.Filter = "Text files (*.txt)|*.txt|Log files (*.log)|*.log";
