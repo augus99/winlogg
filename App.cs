@@ -80,7 +80,8 @@ namespace Winlogg {
         }
 
         private void ButtonExitClickHandler(object sender, EventArgs args) {
-            ExitThread();
+            if (MessageBox.Show("All unsaved data will be lost, press YES to exit the application.", "Exit?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                ExitThread();
         }
     }
 }
