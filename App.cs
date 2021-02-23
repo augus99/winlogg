@@ -83,5 +83,14 @@ namespace Winlogg {
             if (MessageBox.Show("All unsaved data will be lost, press YES to exit the application.", "Exit?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 ExitThread();
         }
+
+        protected override void OnApplicationExit(EventArgs e) {
+            if(!Released) {
+                ExportDialog.Dispose();
+                KbdHook.Unhook();
+            }
+
+            base.OnApplicationExit(e);
+        }
     }
 }
